@@ -1,0 +1,32 @@
+
+version: '3.7'
+services:
+  php:
+    build:
+      context: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    entrypoint: "php -S 0.0.0.0:80"
+    depends_on:
+    - mysqldb
+    links:
+    - mysqldb   
+
+  mysqldb:
+      container_name: mysql
+      image: mysql:latest
+      restart: always
+      ports:
+      - '3306:3306'
+      environment:
+      - MYSQL_ROOT_PASSWORD=root 
+      - MYSQL_DATABASE=help_indica 
+      volumes:    
+          - ./mysqldb:/var/lib/mysql
+
+
